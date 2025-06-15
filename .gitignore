@@ -1,0 +1,26 @@
+# API Keys & secrets
+.env
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+env/
+venv/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary data
+*.log
+*.sqlite3
+data/logs/
+
+# Jupyter and Colab notebooks checkpoints
+.ipynb_checkpoints/
+
+# VSCode settings (optional)
+.vscode/

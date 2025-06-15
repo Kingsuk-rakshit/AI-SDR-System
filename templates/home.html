@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ravian AI SDR System</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #1e0033, #000000);
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+
+  <!-- Navbar -->
+  <nav class="px-6 py-4 flex justify-between items-center border-b border-gray-800">
+    <div class="flex items-center space-x-3">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="w-8 h-8">
+      <span class="text-xl font-bold text-white">Ravian AI <span class="text-purple-500">| SDR System</span></span>
+    </div>
+    <div class="space-x-6">
+      <a href="/" class="hover:text-purple-400">Home</a>
+      <a href="/dashboard" class="hover:text-purple-400">Dashboard</a>
+      <a href="/about" class="hover:text-purple-400">About</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-24 px-6">
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-6">The <span class="text-purple-500">AI</span> Platform For <span class="text-purple-500">Sales</span> Intelligence</h1>
+    <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+      Automating <span class="font-semibold text-white">lead generation</span>, outreach, qualification, and engagement for <span class="font-semibold text-white">Newton AI</span>, a flagship product of <span class="font-semibold text-white">Ravian AI</span>.
+    </p>
+    <a href="/dashboard" class="bg-purple-600 hover:bg-purple-500 text-white px-8 py-3 rounded-full font-semibold transition duration-200 shadow-lg">
+      Go to Dashboard
+    </a>
+  </section>
+
+  <!-- Feature Cards Section -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 pb-24 max-w-6xl mx-auto">
+    <!-- Card 1 -->
+    <div class="bg-gray-900 bg-opacity-50 rounded-2xl p-6 text-center shadow-md border border-gray-800">
+      <div class="flex justify-center mb-4">
+        <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">20x Increase in<br>Efficiency</h3>
+      <p class="text-sm text-gray-400">Ravian AI’s automation capabilities drastically reduce time and effort required for data science and analytics projects.</p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-gray-900 bg-opacity-50 rounded-2xl p-6 text-center shadow-md border border-gray-800">
+      <div class="flex justify-center mb-4">
+        <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 18a6 6 0 100-12 6 6 0 000 12z"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">Self-Debugging and<br>Decision-Making</h3>
+      <p class="text-sm text-gray-400">Ravian AI uses generative AI to self-diagnose issues and make informed decisions, ensuring smooth and efficient operations.</p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-gray-900 bg-opacity-50 rounded-2xl p-6 text-center shadow-md border border-gray-800">
+      <div class="flex justify-center mb-4">
+        <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h18M3 18h18"></path>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold mb-2">Robust Data<br>Security</h3>
+      <p class="text-sm text-gray-400">Robust security ensures sensitive business data is protected, minimizing breaches and non-compliance risks.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-500 py-6 border-t border-gray-800 text-sm">
+    &copy; 2025 Ravian AI. All rights reserved.
+  </footer>
+
+</body>
+</html>

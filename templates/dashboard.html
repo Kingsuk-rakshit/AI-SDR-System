@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SDR Dashboard - Ravian AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #1e0033, #000000);
+    }
+    #loader {
+      display: none;
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+
+  <!-- Loader Overlay -->
+  <div id="loader" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-500"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="px-6 py-4 flex justify-between items-center border-b border-gray-800">
+    <div class="flex items-center space-x-3">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="w-8 h-8">
+      <span class="text-xl font-bold text-white">Ravian AI <span class="text-purple-500">| SDR Dashboard</span></span>
+    </div>
+    <div class="space-x-6">
+      <a href="/" class="hover:text-purple-400">Home</a>
+      <a href="/dashboard" class="hover:text-purple-400">Dashboard</a>
+      <a href="/about" class="hover:text-purple-400">About</a>
+    </div>
+  </nav>
+
+  <main class="px-6 py-10 max-w-6xl mx-auto">
+
+    {% if message %}
+      <div class="bg-blue-800 text-white rounded px-4 py-3 mb-6 shadow">
+        {{ message }}
+      </div>
+    {% endif %}
+
+    <!-- Run Pipeline -->
+    <section class="mb-10">
+      <div class="flex items-center mb-4 space-x-2">
+        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <h2 class="text-2xl font-semibold">Run Full SDR Pipeline</h2>
+      </div>
+      <form method="POST" action="/dashboard" onsubmit="showLoader()">
+        <input type="hidden" name="run_pipeline" value="true">
+        <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded shadow">
+          Run Pipeline
+        </button>
+      </form>
+    </section>
+
+    <!-- Add Lead -->
+    <section class="mb-10">
+      <div class="flex items-center mb-4 space-x-2">
+        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <h2 class="text-2xl font-semibold">Add a Test Lead</h2>
+      </div>
+      <form method="POST" action="/dashboard" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <input type="hidden" name="add_lead" value="true">
+        <input name="name" type="text" placeholder="Name" class="p-2 rounded bg-gray-800 text-white" required>
+        <input name="company" type="text" placeholder="Company" class="p-2 rounded bg-gray-800 text-white" required>
+        <input name="domain" type="text" placeholder="Domain" class="p-2 rounded bg-gray-800 text-white" required>
+        <input name="role" type="text" placeholder="Role" class="p-2 rounded bg-gray-800 text-white" required>
+        <div class="col-span-full">
+          <button type="submit" class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded mt-2 shadow">
+            Add Lead
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- View Leads -->
+    <section class="mb-10">
+      <div class="flex items-center mb-4 space-x-2">
+        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h18M3 18h18" />
+        </svg>
+        <h2 class="text-2xl font-semibold">Current Leads</h2>
+      </div>
+
+      {% if leads %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for lead in leads %}
+            <div class="bg-gray-900 bg-opacity-50 rounded-lg p-4 shadow border border-gray-800">
+              <h3 class="text-lg font-bold text-purple-400">{{ lead.name }}</h3>
+              <p><strong>🏢 Company:</strong> {{ lead.company }}</p>
+              <p><strong>📧 Email:</strong> {{ lead.email or "N/A" }}</p>
+              <p><strong>🧠 Role:</strong> {{ lead.role }}</p>
+              <p><strong>💯 Score:</strong> {{ lead.score or "N/A" }}</p>
+              <p><strong>🏁 Status:</strong> {{ lead.status or "Not yet qualified" }}</p>
+              <p><strong>📈 Sales Stage:</strong> {{ lead.sales_stage or "N/A" }}</p>
+              <p><strong>💬 LLM Reason:</strong> {{ lead.llm_reason or "N/A" }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-gray-400">No leads found. Add a test lead or run the pipeline.</p>
+      {% endif %}
+    </section>
+
+    <!-- Charts -->
+    <section class="mb-10">
+      <div class="flex items-center mb-4 space-x-2">
+        <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 3v18m4-4l4 4m0 0l-4-4m4 4H7" />
+        </svg>
+        <h2 class="text-2xl font-semibold">Lead Statistics</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="bg-gray-900 p-4 rounded shadow h-[300px]">
+    <canvas id="statusChart" class="w-full h-full"></canvas>
+  </div>
+  <div class="bg-gray-900 p-4 rounded shadow h-[300px]">
+    <canvas id="scoreChart" class="w-full h-full"></canvas>
+  </div>
+</div>
+    </section>
+
+    <!-- Human Handoff -->
+    <section class="mb-10">
+      <div class="flex items-center mb-4 space-x-2">
+        <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 00-12 0v4a6 6 0 0012 0V8z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01" />
+        </svg>
+        <h2 class="text-2xl font-semibold">Human SDR Handoff</h2>
+      </div>
+      <form method="GET" action="/handoff">
+        <button type="submit" class="bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-2 rounded shadow">
+          Route Qualified Leads to Human SDR
+        </button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-500 py-6 border-t border-gray-800 text-sm">
+    &copy; 2025 Ravian AI. All rights reserved.
+  </footer>
+
+  <!-- JS for Loader -->
+  <script>
+    function showLoader() {
+      document.getElementById('loader').style.display = 'flex';
+    }
+  </script>
+
+  <!-- Chart.js Configuration -->
+  <script>
+    const statusChart = new Chart(document.getElementById('statusChart'), {
+      type: 'pie',
+      data: {
+        labels: ['Qualified', 'Not Qualified', 'Pending'],
+        datasets: [{
+          label: 'Status',
+          data: [3, 5, 2],  // You can replace with Flask variables
+          backgroundColor: ['#34D399', '#EF4444', '#FBBF24']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    const scoreChart = new Chart(document.getElementById('scoreChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Lead 1', 'Lead 2', 'Lead 3'],
+        datasets: [{
+          label: 'Lead Score',
+          data: [88, 72, 95],  // Replace with dynamic data
+          backgroundColor: '#8B5CF6'
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

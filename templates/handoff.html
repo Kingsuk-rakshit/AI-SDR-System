@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Human Handoff - Ravian AI SDR</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-900 px-6 py-4 flex justify-between items-center shadow">
+    <div class="flex items-center space-x-3">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="w-8 h-8 rounded">
+      <span class="text-xl font-semibold text-white">Ravian AI <span class="text-indigo-500">| Human Handoff</span></span>
+    </div>
+    <div class="space-x-6">
+      <a href="/" class="hover:text-indigo-400 transition">Home</a>
+      <a href="/dashboard" class="hover:text-indigo-400 transition">Dashboard</a>
+      <a href="/about" class="hover:text-indigo-400 transition">About</a>
+    </div>
+  </nav>
+
+  <!-- Main Section -->
+  <main class="px-6 py-10 max-w-6xl mx-auto bg-black">
+
+    <div class="flex items-center mb-6">
+      <svg class="w-8 h-8 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M5 13l4 4L19 7"/>
+      </svg>
+      <h1 class="text-3xl font-bold text-white">🧑‍💼 Human SDR Handoff</h1>
+    </div>
+
+    {% if handed_off and handed_off|length > 0 %}
+      <p class="mb-6 text-green-400 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 13l4 4L19 7"/>
+        </svg>
+        {{ handed_off|length }} leads successfully handed off to human SDRs.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for lead in handed_off %}
+        <div class="bg-gray-800 p-4 rounded-lg shadow hover:shadow-xl transition duration-300">
+          <h2 class="text-lg font-bold text-indigo-400 mb-1">{{ lead.name }}</h2>
+          <p><strong>🏢 Company:</strong> {{ lead.company }}</p>
+          <p><strong>📧 Email:</strong> {{ lead.email or "N/A" }}</p>
+          <p><strong>🧠 Role:</strong> {{ lead.role }}</p>
+          <p><strong>💯 Score:</strong> {{ lead.score or "N/A" }}</p>
+          <p><strong>📈 Sales Stage:</strong> {{ lead.sales_stage or "N/A" }}</p>
+          <p><strong>💬 LLM Reason:</strong> {{ lead.llm_reason or "N/A" }}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <div class="text-gray-400 flex items-center mt-6">
+        <svg class="w-6 h-6 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9.75 17L15 12l-5.25-5"/>
+        </svg>
+        No leads were routed to human SDRs yet. Try running the pipeline and checking for qualified leads.
+      </div>
+    {% endif %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-500 py-6 border-t border-gray-800 text-sm bg-black">
+    &copy; 2025 Ravian AI. All rights reserved.
+  </footer>
+
+</body>
+</html>
