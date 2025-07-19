@@ -1,5 +1,5 @@
 # Core LLM & AutoGen framework
-pyautogen==0.9.0
+ag2==0.9.0
 openai==1.86.0
 
 # Environment config
